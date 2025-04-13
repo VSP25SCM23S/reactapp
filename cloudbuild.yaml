@@ -1,0 +1,22 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/reactapp-456708/reactapp', '.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/reactapp-456708/reactapp']
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: [
+      'run', 'deploy', 'reactapp',
+      '--image', 'gcr.io/reactapp-456708/reactapp',
+      '--platform', 'managed',
+      '--region', 'us-central1',
+      '--allow-unauthenticated',
+      '--port', '80'
+    ]
+
+images:
+  - 'gcr.io/reactapp-456708/reactapp'
+options:
+  logging: CLOUD_LOGGING_ONLY
