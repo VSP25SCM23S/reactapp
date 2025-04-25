@@ -9,9 +9,11 @@ RUN npm run build
 FROM nginx:alpine
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Replace default Nginx config (optional but good practice)
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Optional: Replace default Nginx config
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+# Expose port 80 for Cloud Run
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
 
+# Start Nginx server
+CMD ["nginx", "-g", "daemon off;"]
