@@ -10,8 +10,8 @@ module.exports = function (app) {
     "/api",
     createProxyMiddleware({
       // update the flask Google Cloud url
-      // target: "https://flaskapp-619095842085.us-central1.run.app",
-      target: "http://localhost:8080",
+      target: "https://flaskapp-619095842085.us-central1.run.app",
+      // target: "http://localhost:8080",
       // target: "http://flask-backend:8080",
       changeOrigin: true,
     })
