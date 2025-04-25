@@ -143,7 +143,7 @@ export default function Home() {
 		microservice target: "your_flask_gcloud_url"
 		*/
 		console.log("Flask API:", requestOptions);
-		fetch("/api/github", requestOptions)
+		fetch("https://flaskapp-619095842085.us-central1.run.app/api/github", requestOptions)
 			.then((res) => {
 				console.log("Received response from Flask API:", res);
 				if (!res.ok) {
@@ -185,7 +185,7 @@ export default function Home() {
 			),
 		};
 
-		fetch("/api/github/details", requestOptionsDetails)
+		fetch("https://flaskapp-619095842085.us-central1.run.app/api/github/details", requestOptionsDetails)
 			.then((res) => {
 				console.log("Received response from Flask /api/github/details:", res);
 				if (!res.ok) {
