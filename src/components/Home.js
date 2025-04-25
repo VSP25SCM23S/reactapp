@@ -76,6 +76,7 @@ export default function Home() {
   const [githubRepoData, setGithubData] = useState([]);
   // Updates the repository to newly selected repository
   const eventHandler = (repo) => {
+    console.log("Selected Repository:", repo);
     setRepository(repo);
   };
 
@@ -86,6 +87,8 @@ export default function Home() {
   */
   React.useEffect(() => {
     // set loading to true to display loader
+    console.log("Flask API Loading:");
+    
     setLoading(true);
     const requestOptions = {
       method: "POST",
@@ -95,7 +98,7 @@ export default function Home() {
       // Append the repository key to request body
       body: JSON.stringify({ repository: repository.key }),
     };
-
+    
     /*
     Fetching the GitHub details from flask microservice
     The route "/api/github" is served by Flask/App.py in the line 53
@@ -103,11 +106,20 @@ export default function Home() {
     Which is routed by setupProxy.js to the
     microservice target: "your_flask_gcloud_url"
     */
+   console.log("Flask API:", requestOptions);
     fetch("/api/github", requestOptions)
-      .then((res) => res.json())
+      .then((res) => {
+        console.log("Received response from Flask API:", res);
+        if (!res.ok) {
+          console.error("Response not OK. Status:", res.status);
+          throw new Error(`HTTP status ${res.status}`);
+        }
+        return res.json();
+      })
       .then(
         // On successful response from flask microservice
         (result) => {
+          console.log("Successfully parsed JSON from Flask:", result);
           // On success set loading to false to display the contents of the resonse
           setLoading(false);
           // Set state on successfull response from the API
@@ -115,6 +127,8 @@ export default function Home() {
         },
         // On failure from flask microservice
         (error) => {
+          console.error("Error fetching or parsing data from Flask API:", error);
+
           // Set state on failure response from the API
           console.log(error);
           // On failure set loading to false to display the error message

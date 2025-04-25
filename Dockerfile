@@ -1,19 +1,17 @@
-# Stage 1: Build React App
-FROM node:18 as build
+# React Dev Server in Cloud Run (for development only)
+FROM node:18-alpine
+
+# Set working directory
 WORKDIR /app
-COPY . .
+
+# Copy package.json and install dependencies
+COPY package.json ./
+COPY ./public ./public
+COPY ./src ./src
 RUN npm install
-RUN npm run build
 
-# Stage 2: Serve with Nginx
-FROM nginx:alpine
-COPY --from=build /app/build /usr/share/nginx/html
-
-# Optional: Replace default Nginx config
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expose port 80 for Cloud Run
+# Expose port 80 (Cloud Run uses this)
 EXPOSE 80
 
-# Start Nginx server
-CMD ["nginx", "-g", "daemon off;"]
+# Start React dev server on port 80
+CMD ["npm", "start", "--", "--port", "80", "--host", "0.0.0.0"]
